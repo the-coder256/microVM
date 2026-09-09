@@ -1,0 +1,52 @@
+[ Bytecode Layout ]
+[magic bytes][constants]0xff[names]0xff[instructions]0xff
+magic bytes - represents bytes a0 ff
+constants - null terminated strings and numbers
+names - null terminated names
+instructions - instructions executed by the VM
+
+[ Opcodes ]
+nop - 1C
+load_value - 20
+load_literal - 2A
+load_name - 30
+store_name - 3F
+pop_top - 40
+call - 4A
+bin_op - 50
+jump_label - 60
+jump_if_false - 6A
+jump_if_true - 6F
+return_value - 70
+return_const - 77
+
+[ Extra Details ]
+bin_ops argument determines what binary operation to perform. Here's the table of operations:
+0 - +
+1 - -
+2 - *
+3 - /
+4 - ==
+5 - <
+6 - >
+7 - <=
+8 - >=
+9 - &&
+10 - ||
+11 - !
+12 - &
+13 - |
+14 - ~
+15 - ^
+16 - <<
+17 - >>
+
+I might add more instructions and opcodes overtime but the list I currently have (1C to 77) *should* be good enough.
+
+If you are compiling to this bytecode, it is recommended you compile to a textual version and then assemble it to this bytecode. Compilers don't go straight to object code you know.
+
+There are two different types of constants: numbers and strings. Numbers are preceded by 0x1A and strings are preceded by 0x1F. This is made to differentiate between a number and a string. (e.g. "2.2" vs 2.2)
+
+load_literal is an instruction intended for assemblers. It takes a 16-bit integer as an argument and pushes it to the stack. It was intended to replace load_labels with their respective addresses.
+
+jump_label (and the other jumps) is meant to jump to a label. Labels are not included in the binary so jumping to a literal address is required here. It loads a 16-bit integer and jumps there.
