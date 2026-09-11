@@ -213,6 +213,6 @@ class VM:
                 print("warning: reached end of text section")
             code:int = self.execute_instruction(instruction, list(self.variables.keys())[-1], None)
             if len(self.variables) < 1:
-                print(self.stack)
+                print(f"stack: {self.stack}")
                 return 0
         return 0
