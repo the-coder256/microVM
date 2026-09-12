@@ -165,11 +165,15 @@ class VM:
                 self.bp = target
         elif instruction == 0x70:    # return_value
             self.destroy_scope(scope)
+            if len(self.return_addrs) > 0:
+                self.bp = self.return_addrs.pop()
             return 0
         elif instruction == 0x77:    # return_const
             to_load = self.fetch_number()
             self.push(self.get_constant(to_load))
             self.destroy_scope(scope)
+            if len(self.return_addrs) > 0:
+                self.bp = self.return_addrs.pop()
             return 0
         return 0
 
