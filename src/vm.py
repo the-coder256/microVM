@@ -4,16 +4,18 @@ class VM:
         self.content:bytes = None
         self.constants:list[tuple] = [0]
         self.names:list[str] = []
+        self.instructions = bytearray()
         self.bp:int = 0               # byte pointer
         self.stack:list = []          # just the stack
         self.variables:dict = {-1:{}} # just variables
         self.return_addrs = []        # just return addresses
         self.next_id:int = 0          # just the uhh yeah the uhh actually yeah its the uhhh the uhh oh ye the uhhh oh uhh the uhh
+        self.target = None
 
     def get(self)->int:
         try:
-            return self.content[self.bp]
-        except:
+            return self.target[self.bp]
+        except IndexError:
             return 0
 
     def fetch(self)->int:
@@ -175,11 +177,13 @@ class VM:
         self.content:bytes = content
         self.constants:list[tuple] = [0]
         self.names:list[str] = []
+        self.instructions = bytearray()
         self.bp:int = 0    # check the __init__ function to see this comment
         self.stack:list = []    # lists can larp stacks
         self.variables:dict = {-1: {}}
         self.return_addrs = []
         self.next_id:int = 0
+        self.target = self.content
         # read magic bytes (A0 FF)
         if self.fetch() != 0xA0 or self.fetch() != 0xFF:
             print("error: invalid binary")
@@ -206,7 +210,14 @@ class VM:
             self.fetch()
             self.names.append(name)
         self.fetch()
+        # fetch instructions
+        while self.get() != 0xFF:
+            byte = self.fetch()
+            self.instructions.append(byte)
+        self.fetch()
         # execute instructions
+        self.target = self.instructions
+        self.bp = 0
         while True:
             instruction = self.fetch()
             if instruction == 0xff:
