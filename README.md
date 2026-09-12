@@ -13,8 +13,12 @@ python3 src/main.py tests/test.bin
 ```
 
 ## Changelogs
+### v1.1.0:
+- Improve instruction handling
+- Improve stack display on regular exit
+
 ### v1.0.0:
 - Release
 
 ## Other Things
-Assembler: TBA
+Assembler: [microASM](https://github.com/the-coder256/microASM)
