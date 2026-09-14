@@ -10,15 +10,20 @@ nop - 1C
 load_value - 20
 load_literal - 2A
 load_name - 30
+delete_name - 3A
 store_name - 3F
 pop_top - 40
 call - 4A
 bin_op - 50
+bin_index - 5A
 jump_label - 60
 jump_if_false - 6A
 jump_if_true - 6F
 return_value - 70
 return_const - 77
+make_list - 80
+make_tuple - 8A
+make_dict - 8F
 
 [ Extra Details ]
 bin_ops argument determines what binary operation to perform. Here's the table of operations:

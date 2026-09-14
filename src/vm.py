@@ -77,6 +77,10 @@ class VM:
         # scope.name = value
         self.variables.get(scope).update({name: value})
 
+    def del_variable(self, name:str, scope:int):
+        # returns the value of the variable if u want it ig
+        return self.variables.get(scope).pop(name, None)
+
     def create_new_scope(self)->int:
         scope_id = self.next_id
         self.next_id += 1
@@ -100,6 +104,10 @@ class VM:
             to_load = self.fetch_number()
             value = self.get_variable(self.get_name(to_load), scope, parent_scope)
             self.push(value)
+        elif instruction == 0x3a:    # delete_name
+            to_load = self.fetch_number()
+            name = self.get_name(to_load)
+            self.del_variable(name, scope)
         elif instruction == 0x3f:    # store_name
             to_load = self.fetch_number()
             value = self.pop()
@@ -150,6 +158,15 @@ class VM:
             elif operator == 16: result = left << right
             elif operator == 17: result = left >> right
             self.push(int(result))
+        elif instruction == 0x5a:    # bin_index
+            index = self.pop()
+            if index is not int:
+                return 1
+            iterable = self.pop()
+            try:
+                self.push(iterable[index])
+            except IndexError:
+                self.push(None)
         elif instruction == 0x60:    # jump_label
             target = self.fetch_number()
             self.bp = target
@@ -175,6 +192,33 @@ class VM:
             if len(self.return_addrs) > 0:
                 self.bp = self.return_addrs.pop()
             return 0
+        elif instruction == 0x80:    # make_list
+            item_count = self.fetch_number()
+            items = []
+            for i in range(item_count):
+                items.append(self.pop())
+            self.push(items.reverse())
+        elif instruction == 0x8a:    # make_tuple
+            item_count = self.fetch_number()
+            items = []
+            for i in range(item_count):
+                items.append(self.pop())
+            self.push(tuple(items.reverse()))
+        elif instruction == 0x8f:    # make_dict
+            item_count = self.fetch_number()
+            items = []
+            for i in range(item_count):
+                items.append(self.pop())
+            items = items.reverse()
+            dictionary:dict = {}
+            try:
+                for i in range(0, len(items), 2):
+                    name = items[i]
+                    value = items[i + 1]
+                    dictionary.update({name: value})
+            except IndexError:
+                return 1
+            self.push(dictionary)
         return 0
 
     def run(self, content:bytes)->int:
