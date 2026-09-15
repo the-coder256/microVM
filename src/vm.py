@@ -160,13 +160,13 @@ class VM:
             self.push(int(result))
         elif instruction == 0x5a:    # bin_index
             index = self.pop()
-            if index is not int:
+            if type(index) != int:
                 return 1
             iterable = self.pop()
             try:
                 self.push(iterable[index])
             except IndexError:
-                self.push(None)
+                return 1
         elif instruction == 0x60:    # jump_label
             target = self.fetch_number()
             self.bp = target
@@ -197,19 +197,21 @@ class VM:
             items = []
             for i in range(item_count):
                 items.append(self.pop())
-            self.push(items.reverse())
+            items.reverse()
+            self.push(items)
         elif instruction == 0x8a:    # make_tuple
             item_count = self.fetch_number()
             items = []
             for i in range(item_count):
                 items.append(self.pop())
-            self.push(tuple(items.reverse()))
+            items.reverse()
+            self.push(tuple(items))
         elif instruction == 0x8f:    # make_dict
             item_count = self.fetch_number()
             items = []
             for i in range(item_count):
                 items.append(self.pop())
-            items = items.reverse()
+            items.reverse()
             dictionary:dict = {}
             try:
                 for i in range(0, len(items), 2):
