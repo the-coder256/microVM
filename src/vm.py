@@ -2,7 +2,7 @@
 class VM:
     def __init__(self):
         self.content:bytes = None
-        self.constants:list[tuple] = [0]
+        self.constants:list[tuple] = [(0x1f, None)]
         self.names:list[str] = []
         self.instructions = bytearray()
         self.bp:int = 0               # byte pointer
@@ -157,7 +157,10 @@ class VM:
             elif operator == 15: result = left ^ right
             elif operator == 16: result = left << right
             elif operator == 17: result = left >> right
-            self.push(int(result))
+            if type(result) == bool:
+                self.push(int(result))
+            else:
+                self.push(result)
         elif instruction == 0x5a:    # bin_index
             index = self.pop()
             if type(index) != int:
@@ -225,7 +228,7 @@ class VM:
 
     def run(self, content:bytes)->int:
         self.content:bytes = content
-        self.constants:list[tuple] = [0]
+        self.constants:list[tuple] = [(0x1f, None)]
         self.names:list[str] = []
         self.instructions = bytearray()
         self.bp:int = 0    # check the __init__ function to see this comment
