@@ -13,6 +13,9 @@ python3 src/main.py tests/test.bin
 ```
 
 ## Changelogs
+### v1.3.0:
+- Add base input/output instructions
+
 ### v1.2.0:
 - Add 5 new instructions (check documentation/bytecode info.txt)
 
