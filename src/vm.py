@@ -226,7 +226,7 @@ class VM:
             self.push(dictionary)
         elif instruction == 0x90:    # print_value
             value = self.pop()
-            print(value)    # hey look print value!!!
+            print(value, end="")    # hey look print value!!!
         elif instruction == 0x9a:    # accept_input
             given = input()
             self.push(given)
