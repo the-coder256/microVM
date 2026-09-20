@@ -224,6 +224,12 @@ class VM:
             except IndexError:
                 return 1
             self.push(dictionary)
+        elif instruction == 0x90:    # print_value
+            value = self.pop()
+            print(value)    # hey look print value!!!
+        elif instruction == 0x9a:    # accept_input
+            given = input()
+            self.push(given)
         return 0
 
     def run(self, content:bytes)->int:

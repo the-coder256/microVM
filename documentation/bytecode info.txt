@@ -24,6 +24,8 @@ return_const - 77
 make_list - 80
 make_tuple - 8A
 make_dict - 8F
+print_value - 90
+accept_input - 9A
 
 [ Extra Details ]
 bin_ops argument determines what binary operation to perform. Here's the table of operations:
