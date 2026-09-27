@@ -16,6 +16,7 @@ pop_top - 40
 call - 4A
 bin_op - 50
 bin_index - 5A
+store_index - 5F
 jump_label - 60
 jump_if_false - 6A
 jump_if_true - 6F

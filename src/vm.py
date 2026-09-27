@@ -170,6 +170,20 @@ class VM:
                 self.push(iterable[index])
             except IndexError:
                 return 1
+        elif instruction == 0x5f:    # store_index
+            index = self.pop()
+            destination = self.pop()
+            source = self.pop()
+            # get the name to store into
+            to_load = self.fetch_number()
+            name = self.get_name(to_load)
+            # do the computation
+            try:
+                destination[index] = source
+            except TypeError:
+                return 1
+            # overwrite NAME with DEST (the edited thingy)
+            self.set_variable(name, destination, scope)
         elif instruction == 0x60:    # jump_label
             target = self.fetch_number()
             self.bp = target
